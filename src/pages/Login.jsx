@@ -17,14 +17,24 @@ function Login() {
   }
 
   const handleSignup = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
-    const { error } = await supabase.auth.signUp({ email, password })
-    if (error) setError(error.message)
-    else setError('Check your email to confirm your account!')
+  e.preventDefault()
+  setLoading(true)
+  setError(null)
+
+  if (password.length < 6) {
+    setError('Password must be at least 6 characters')
     setLoading(false)
+    return
   }
+
+  const { error } = await supabase.auth.signUp({ email, password })
+
+  if (error) {
+    setError(error.message)
+  }
+  setLoading(false)
+} // setloading is false here and it goes back to the login screen,
+//  but since the user is now signed up, they can log in with their new credentials. we could also automatically log them in after signing up, but for simplicity we just show the login screen again.
 
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#EBF4EC' }}>
